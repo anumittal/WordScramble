@@ -11,6 +11,7 @@
 		F179FB2725E108C000D0C1F1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F179FB2625E108C000D0C1F1 /* ContentView.swift */; };
 		F179FB2925E108C200D0C1F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F179FB2825E108C200D0C1F1 /* Assets.xcassets */; };
 		F179FB2C25E108C200D0C1F1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F179FB2B25E108C200D0C1F1 /* Preview Assets.xcassets */; };
+		F179FB3525E11A1000D0C1F1 /* start.txt in Resources */ = {isa = PBXBuildFile; fileRef = F179FB3425E11A1000D0C1F1 /* start.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		F179FB2825E108C200D0C1F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F179FB2B25E108C200D0C1F1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F179FB2D25E108C200D0C1F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F179FB3425E11A1000D0C1F1 /* start.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = start.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 			children = (
 				F179FB2425E108C000D0C1F1 /* WordScrambleApp.swift */,
 				F179FB2625E108C000D0C1F1 /* ContentView.swift */,
+				F179FB3425E11A1000D0C1F1 /* start.txt */,
 				F179FB2825E108C200D0C1F1 /* Assets.xcassets */,
 				F179FB2D25E108C200D0C1F1 /* Info.plist */,
 				F179FB2A25E108C200D0C1F1 /* Preview Content */,
@@ -127,6 +130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F179FB2C25E108C200D0C1F1 /* Preview Assets.xcassets in Resources */,
+				F179FB3525E11A1000D0C1F1 /* start.txt in Resources */,
 				F179FB2925E108C200D0C1F1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
