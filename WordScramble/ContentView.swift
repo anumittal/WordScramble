@@ -16,54 +16,77 @@ struct ContentView: View {
   @State private var errorMessage = ""
   @State private var showingError = false
   
-    var body: some View {
-      NavigationView {
-        VStack {
-          TextField("Enter your word", text: $newWord, onCommit: addNewWord)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .autocapitalization(.none)
-            .padding()
-
-          List(usedWords, id: \.self) {
-            Image(systemName: "\($0.count).circle")
-            Text($0)
-          }
+  @State private var score = 0
+  
+  var body: some View {
+    NavigationView {
+      VStack {
+        TextField("Enter your word",
+                  text: $newWord,
+                  onCommit: addNewWord)
+          .textFieldStyle(RoundedBorderTextFieldStyle())
+          .autocapitalization(.none)
+          .padding()
+        
+        List(usedWords, id: \.self) {
+          Image(systemName: "\($0.count).circle")
+          Text($0)
         }
-        .navigationBarTitle("\(rootWord)")
-      }.onAppear(perform: setupGame)
-      .alert(isPresented: $showingError) {
-          Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+        Text("Score: \(score)")
+          .font(.largeTitle)
       }
+      .navigationBarTitle("\(rootWord)")
+      .navigationBarItems(
+        leading: Button("Restart Game") {
+          self.setupGame()
+        })
     }
+    .onAppear(perform: setupGame)
+    .alert(isPresented: $showingError) {
+      Alert(title: Text(errorTitle),
+            message: Text(errorMessage),
+            dismissButton: .default(Text("OK")))
+    }
+  }
   
   func addNewWord() {
     let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-    
+
     guard answer.count > 0 else {
       return
     }
-    
+
     guard isOriginal(word: answer) else {
-        wordError(title: "Word used already", message: "Be more original")
-        return
+      wordError(title: "Word used already", message: "Be more original")
+      return
     }
 
     guard isPossible(word: answer) else {
-        wordError(title: "Word not recognized", message: "Check the charaters - You can't just make them up, you know!")
-        return
+      wordError(title: "Word not recognized",
+                message: "Check the charaters - You can't just make them up, you know!")
+      return
     }
 
     guard isReal(word: answer) else {
-        wordError(title: "Word not possible", message: "That isn't a real word.")
-        return
+      let title = "Word not possible"
+      var message = "That isn't a real word."
+      if answer.count < 3 {
+        message = "Please enter more than 2 letter word"
+      }
+      wordError(title: title, message: message)
+      return
     }
-    
-    
+
     usedWords.insert(answer, at: 0)
+    newScore(answer)
     newWord = ""
   }
   
-  func setupGame() {
+  private func newScore(_ answer: String) {
+    score = score + usedWords.count*answer.count
+  }
+  
+  private func setupGame() {
     if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: ".txt") {
       if let startWords = try? String(contentsOf: startWordsURL) {
         let allWords = startWords.components(separatedBy: "\n")
@@ -75,12 +98,12 @@ struct ContentView: View {
   }
   
   // check if the word is new
-  func isOriginal(word: String) -> Bool {
+  private func isOriginal(word: String) -> Bool {
     !usedWords.contains(word)
   }
   
   // check if it using the valid charaters
-  func isPossible(word: String) -> Bool {
+  private func isPossible(word: String) -> Bool {
     var tempWord = rootWord
     for letter in word {
       if let letterIndex = tempWord.firstIndex(of: letter) {
@@ -91,23 +114,39 @@ struct ContentView: View {
     }
     return true
   }
-
-  func isReal(word: String) -> Bool {
+  
+  private func isReal(word: String) -> Bool {
+    // check for valid length - > 3
+    guard word.count > 3 else {
+      return false
+    }
+    
+    // check if starting word matches the root word
+    guard word != String(rootWord.prefix(word.count)) else {
+      return false
+    }
+    
+    // check if the word is a valid en dictionay word
     let checker = UITextChecker()
     let range = NSRange(location: 0, length: word.utf16.count)
-    let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
+    let misspelledRange = checker.rangeOfMisspelledWord(
+      in: word,
+      range: range,
+      startingAt: 0,
+      wrap: false,
+      language: "en")
     return misspelledRange.location == NSNotFound
   }
-
-  func wordError(title: String, message: String) {
-      errorTitle = title
-      errorMessage = message
-      showingError = true
+  
+  private func wordError(title: String, message: String) {
+    errorTitle = title
+    errorMessage = message
+    showingError = true
   }
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+  static var previews: some View {
+    ContentView()
+  }
 }
